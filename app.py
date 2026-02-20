@@ -50,7 +50,7 @@ class NewJeansInspiredPlayer(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("NWJNS Pixel Player 💙")
-        self.geometry("980x640")
+        self.geometry("1040x700")
         self.configure(bg="#edf2ff")
         self.minsize(860, 560)
 
@@ -63,6 +63,9 @@ class NewJeansInspiredPlayer(tk.Tk):
             "accent": "#6a79d6",
             "accent2": "#8fa4ff",
             "highlight": "#ffffff",
+            "mint": "#c6ffe8",
+            "pink": "#ffd8f1",
+            "gold": "#ffe8a8",
         }
 
         self.resolver = YouTubeAudioResolver()
@@ -139,6 +142,7 @@ class NewJeansInspiredPlayer(tk.Tk):
     def _build_ui(self):
         root = ttk.Frame(self, style="Pixel.TFrame", padding=10)
         root.pack(fill="both", expand=True, padx=14, pady=14)
+        self._draw_window_decor(root)
 
         header = ttk.Frame(root, style="Pixel.TFrame", padding=8)
         header.pack(fill="x", pady=(0, 10))
@@ -247,31 +251,49 @@ class NewJeansInspiredPlayer(tk.Tk):
         # Scene base platform
         self.canvas.create_rectangle(40, h - 110, w - 40, h - 70, fill=self.palette["panel_deep"], outline=self.palette["ink_soft"], width=2)
 
-        # Bubble logo text
+        # Bubble logo text (kept centered and scaled to avoid clipping)
         self.canvas.create_text(
             w // 2,
-            70,
-            text="NWJNS",
+            72,
+            text="NEWJEANS",
             fill=self.palette["accent"],
-            font=("Courier New", 46, "bold"),
+            font=("Courier New", 34, "bold"),
         )
 
-        # Pixel character (bunny-inspired mascot)
-        base_x = 130
-        base_y = h - 170
+        # Cute pixel hearts / charms
+        for cx, cy, color in (
+            (72, 74, self.palette["pink"]),
+            (w - 74, 74, self.palette["pink"]),
+            (w - 120, 126, self.palette["mint"]),
+        ):
+            self._draw_pixel_heart(cx, cy, 7, color)
+
+        # NewJeans bunny mascot
+        base_x = 82
+        base_y = h - 198
         blocks = [
-            (0, 2), (1, 1), (2, 1), (3, 1), (4, 2),
-            (0, 3), (4, 3), (1, 4), (2, 4), (3, 4),
-            (1, 5), (3, 5), (1, 6), (2, 6), (3, 6),
             (2, 0), (3, 0),
+            (1, 1), (2, 1), (3, 1), (4, 1),
+            (1, 2), (2, 2), (3, 2), (4, 2),
+            (0, 3), (1, 3), (2, 3), (3, 3), (4, 3), (5, 3),
+            (0, 4), (1, 4), (2, 4), (3, 4), (4, 4), (5, 4),
+            (1, 5), (2, 5), (3, 5), (4, 5),
+            (2, 6), (3, 6),
+            (1, -1), (1, -2),
+            (4, -1), (4, -2),
         ]
         for bx, by in blocks:
-            x0 = base_x + bx * 14
-            y0 = base_y + by * 14
-            self.canvas.create_rectangle(x0, y0, x0 + 14, y0 + 14, fill=self.palette["highlight"], outline=self.palette["ink_soft"])
+            x0 = base_x + bx * 12
+            y0 = base_y + by * 12
+            self.canvas.create_rectangle(x0, y0, x0 + 12, y0 + 12, fill=self.palette["highlight"], outline=self.palette["ink_soft"])
 
-        self.canvas.create_rectangle(base_x + 28, base_y + 42, base_x + 34, base_y + 48, fill=self.palette["ink"], outline=self.palette["ink"])
-        self.canvas.create_rectangle(base_x + 42, base_y + 42, base_x + 48, base_y + 48, fill=self.palette["ink"], outline=self.palette["ink"])
+        self.canvas.create_rectangle(base_x + 25, base_y + 44, base_x + 30, base_y + 49, fill=self.palette["ink"], outline=self.palette["ink"])
+        self.canvas.create_rectangle(base_x + 42, base_y + 44, base_x + 47, base_y + 49, fill=self.palette["ink"], outline=self.palette["ink"])
+        self.canvas.create_rectangle(base_x + 31, base_y + 58, base_x + 41, base_y + 61, fill=self.palette["accent"], outline=self.palette["accent"])
+
+        # Bunny charm string
+        self.canvas.create_line(base_x + 30, base_y - 28, base_x + 88, base_y - 50, fill=self.palette["ink_soft"], width=2)
+        self._draw_pixel_heart(base_x + 92, base_y - 52, 5, self.palette["gold"])
 
         # Cassette player body
         self.deck_x = w // 2 - 140
@@ -328,6 +350,53 @@ class NewJeansInspiredPlayer(tk.Tk):
             x0 = eq_start_x + i * 13
             rect = self.canvas.create_rectangle(x0, self.deck_y + 112, x0 + 8, self.deck_y + 112, fill=self.palette["accent"], outline="")
             self.eq_rects.append(rect)
+
+        # Irregular frame tabs / ornaments to make the player shell less boxy
+        tab_color = self.palette["panel_deep"]
+        for points in (
+            (8, 130, 38, 130, 38, 170, 8, 170),
+            (w - 8, 190, w - 36, 190, w - 36, 230, w - 8, 230),
+            (150, h - 8, 190, h - 8, 190, h - 36, 150, h - 36),
+            (w - 230, h - 8, w - 178, h - 8, w - 178, h - 34, w - 230, h - 34),
+        ):
+            self.canvas.create_polygon(*points, fill=tab_color, outline=self.palette["ink_soft"], width=2)
+
+    def _draw_pixel_heart(self, x, y, px, color):
+        heart_pixels = {
+            (1, 0), (3, 0),
+            (0, 1), (2, 1), (4, 1),
+            (0, 2), (1, 2), (3, 2), (4, 2),
+            (1, 3), (2, 3), (3, 3),
+            (2, 4),
+        }
+        for hx, hy in heart_pixels:
+            x0 = x + hx * px
+            y0 = y + hy * px
+            self.canvas.create_rectangle(x0, y0, x0 + px, y0 + px, fill=color, outline=color)
+
+    def _draw_window_decor(self, root):
+        # Decorative pieces that stick out from the main panel edges for an irregular silhouette.
+        decor = (
+            ("♡ NJ", -10, 20, self.palette["pink"]),
+            ("🐰", 18, -12, self.palette["mint"]),
+            ("✦✦", 760, -12, self.palette["gold"]),
+            ("BUNNIES", 860, 22, self.palette["panel_deep"]),
+            ("NJ", -16, 500, self.palette["panel_deep"]),
+            ("💿", 930, 520, self.palette["mint"]),
+        )
+        for txt, x, y, bg in decor:
+            lbl = tk.Label(
+                root,
+                text=txt,
+                font=("Courier New", 10, "bold"),
+                fg=self.palette["ink"],
+                bg=bg,
+                bd=2,
+                relief="solid",
+                padx=7,
+                pady=3,
+            )
+            lbl.place(x=x, y=y)
 
     def _start_animators(self):
         self._update_visuals()
