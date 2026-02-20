@@ -51,21 +51,22 @@ class NewJeansInspiredPlayer(tk.Tk):
         super().__init__()
         self.title("NWJNS Pixel Player 💙")
         self.geometry("1040x700")
-        self.configure(bg="#edf2ff")
+        self.configure(bg="#140c44")
         self.minsize(860, 560)
 
         self.palette = {
-            "bg": "#edf2ff",
-            "panel": "#dbe6ff",
-            "panel_deep": "#c4d7ff",
-            "ink": "#1b2a5e",
-            "ink_soft": "#4c5ba5",
-            "accent": "#6a79d6",
-            "accent2": "#8fa4ff",
+            "bg": "#140c44",
+            "bg2": "#201269",
+            "panel": "#3a35b8",
+            "panel_deep": "#241b85",
+            "ink": "#f6f7ff",
+            "ink_soft": "#a9b8ff",
+            "accent": "#ff68cc",
+            "accent2": "#6d8cff",
             "highlight": "#ffffff",
-            "mint": "#c6ffe8",
-            "pink": "#ffd8f1",
-            "gold": "#ffe8a8",
+            "mint": "#8ff8ff",
+            "pink": "#ffb0ef",
+            "gold": "#ffe27a",
         }
 
         self.resolver = YouTubeAudioResolver()
@@ -106,40 +107,41 @@ class NewJeansInspiredPlayer(tk.Tk):
 
         style.configure(
             "Pixel.TFrame",
-            background=self.palette["panel"],
+            background=self.palette["bg"],
             borderwidth=2,
             relief="solid",
         )
         style.configure(
             "Pixel.TLabel",
-            background=self.palette["panel"],
+            background=self.palette["bg"],
             foreground=self.palette["ink"],
             font=("Courier New", 10, "bold"),
         )
         style.configure(
             "Title.TLabel",
-            background=self.palette["panel"],
-            foreground=self.palette["ink"],
+            background=self.palette["bg"],
+            foreground=self.palette["pink"],
             font=("Courier New", 18, "bold"),
         )
         style.configure(
             "Pixel.TButton",
-            background=self.palette["accent2"],
+            background=self.palette["panel"],
             foreground=self.palette["ink"],
             font=("Courier New", 10, "bold"),
             borderwidth=2,
             focusthickness=2,
-            focuscolor=self.palette["ink"],
+            focuscolor=self.palette["pink"],
             padding=6,
         )
         style.map(
             "Pixel.TButton",
             background=[("active", self.palette["accent"]), ("pressed", self.palette["panel_deep"])],
+            foreground=[("active", self.palette["highlight"])],
         )
         style.configure(
             "Pixel.Horizontal.TScale",
-            background=self.palette["panel"],
-            troughcolor=self.palette["highlight"],
+            background=self.palette["bg"],
+            troughcolor=self.palette["panel"],
         )
 
     def _build_ui(self):
@@ -149,8 +151,8 @@ class NewJeansInspiredPlayer(tk.Tk):
         header = ttk.Frame(root, style="Pixel.TFrame", padding=8)
         header.pack(fill="x", pady=(0, 10))
 
-        ttk.Label(header, text="NWJNS PIXEL PLAYER", style="Title.TLabel").pack(side="left")
-        self.now_label = ttk.Label(header, text="Ready to play ✨", style="Pixel.TLabel")
+        ttk.Label(header, text="✦ BUNNY POP PLAYER ✦", style="Title.TLabel").pack(side="left")
+        self.now_label = ttk.Label(header, text="Ready to sparkle ✨", style="Pixel.TLabel")
         self.now_label.pack(side="right")
 
         body = ttk.Frame(root, style="Pixel.TFrame", padding=8)
@@ -168,7 +170,7 @@ class NewJeansInspiredPlayer(tk.Tk):
             height=360,
             bg=self.palette["bg"],
             highlightthickness=2,
-            highlightbackground=self.palette["ink_soft"],
+            highlightbackground=self.palette["accent"],
         )
         self.canvas.pack(fill="both", expand=True)
         self.canvas.bind("<Configure>", self._on_canvas_resize)
@@ -177,22 +179,27 @@ class NewJeansInspiredPlayer(tk.Tk):
         controls.pack(fill="x", pady=(8, 0))
 
         self.url_var = tk.StringVar()
-        entry = ttk.Entry(controls, textvariable=self.url_var, font=("Courier New", 10, "bold"))
+        entry = ttk.Entry(
+            controls,
+            textvariable=self.url_var,
+            font=("Courier New", 10, "bold"),
+            foreground=self.palette["panel_deep"],
+        )
         entry.pack(side="left", fill="x", expand=True, padx=(0, 8))
-        entry.insert(0, "Paste YouTube URL or video ID")
+        entry.insert(0, "Search dreamy song URL or video ID")
 
-        ttk.Button(controls, text="Play URL", style="Pixel.TButton", command=self.play_from_entry).pack(side="left")
+        ttk.Button(controls, text="💖 Play", style="Pixel.TButton", command=self.play_from_entry).pack(side="left")
 
         transport = ttk.Frame(left, style="Pixel.TFrame", padding=8)
         transport.pack(fill="x", pady=(8, 0))
 
-        ttk.Button(transport, text="⏮ Prev", style="Pixel.TButton", command=self.play_prev).pack(side="left", padx=4)
-        ttk.Button(transport, text="▶ Play", style="Pixel.TButton", command=self.resume).pack(side="left", padx=4)
-        ttk.Button(transport, text="⏸ Pause", style="Pixel.TButton", command=self.pause).pack(side="left", padx=4)
-        ttk.Button(transport, text="⏭ Next", style="Pixel.TButton", command=self.play_next).pack(side="left", padx=4)
+        ttk.Button(transport, text="⏮ Bunny", style="Pixel.TButton", command=self.play_prev).pack(side="left", padx=4)
+        ttk.Button(transport, text="▶ Love", style="Pixel.TButton", command=self.resume).pack(side="left", padx=4)
+        ttk.Button(transport, text="⏸ Dream", style="Pixel.TButton", command=self.pause).pack(side="left", padx=4)
+        ttk.Button(transport, text="⏭ Star", style="Pixel.TButton", command=self.play_next).pack(side="left", padx=4)
 
         self.volume_var = tk.DoubleVar(value=75)
-        ttk.Label(transport, text="VOL", style="Pixel.TLabel").pack(side="left", padx=(12, 4))
+        ttk.Label(transport, text="LOUDNESS", style="Pixel.TLabel").pack(side="left", padx=(12, 4))
         vol = ttk.Scale(
             transport,
             from_=0,
@@ -203,19 +210,19 @@ class NewJeansInspiredPlayer(tk.Tk):
         )
         vol.pack(side="left", fill="x", expand=True)
 
-        ttk.Label(right, text="PLAYLIST", style="Title.TLabel").pack(anchor="w", pady=(0, 8))
+        ttk.Label(right, text="KAWAII QUEUE", style="Title.TLabel").pack(anchor="w", pady=(0, 8))
 
         self.listbox = tk.Listbox(
             right,
             width=38,
             height=18,
             font=("Courier New", 10, "bold"),
-            bg=self.palette["highlight"],
+            bg=self.palette["panel_deep"],
             fg=self.palette["ink"],
-            selectbackground=self.palette["accent2"],
-            selectforeground=self.palette["ink"],
+            selectbackground=self.palette["accent"],
+            selectforeground=self.palette["highlight"],
             highlightthickness=2,
-            highlightbackground=self.palette["ink_soft"],
+            highlightbackground=self.palette["accent2"],
         )
         self.listbox.pack(fill="y", expand=True)
         self.listbox.bind("<<ListboxSelect>>", self.on_select_track)
@@ -247,22 +254,27 @@ class NewJeansInspiredPlayer(tk.Tk):
         w = max(560, int(self.canvas.winfo_width()))
         h = max(360, int(self.canvas.winfo_height()))
 
-        # Pixel checker backdrop
+        # Pixel candy-night backdrop
         px = 8
         for y in range(0, h, px):
             for x in range(0, w, px):
-                c = self.palette["bg"] if (x // px + y // px) % 2 == 0 else "#e3ebff"
+                c = self.palette["bg"] if (x // px + y // px) % 2 == 0 else self.palette["bg2"]
                 self.canvas.create_rectangle(x, y, x + px, y + px, fill=c, outline=c)
 
+        # Bubble clouds
+        for cx in range(40, w, 88):
+            self.canvas.create_oval(cx - 28, h - 100, cx + 28, h - 60, fill="#dce1ff", outline="#dce1ff")
+            self.canvas.create_oval(cx - 10, h - 115, cx + 42, h - 60, fill="#f1f3ff", outline="#f1f3ff")
+
         # Scene base platform
-        self.canvas.create_rectangle(40, h - 110, w - 40, h - 70, fill=self.palette["panel_deep"], outline=self.palette["ink_soft"], width=2)
+        self.canvas.create_rectangle(40, h - 110, w - 40, h - 70, fill="#c6d0ff", outline="#edf0ff", width=2)
 
         # Bubble logo text (kept centered and scaled to avoid clipping)
         self.canvas.create_text(
             w // 2,
             72,
             text="NEWJEANS",
-            fill=self.palette["accent"],
+            fill=self.palette["pink"],
             font=("Courier New", 34, "bold"),
         )
 
@@ -291,11 +303,11 @@ class NewJeansInspiredPlayer(tk.Tk):
         for bx, by in blocks:
             x0 = base_x + bx * 12
             y0 = base_y + by * 12
-            self.canvas.create_rectangle(x0, y0, x0 + 12, y0 + 12, fill=self.palette["highlight"], outline=self.palette["ink_soft"])
+            self.canvas.create_rectangle(x0, y0, x0 + 12, y0 + 12, fill="#fff4fd", outline="#ffb7ef")
 
-        self.canvas.create_rectangle(base_x + 25, base_y + 44, base_x + 30, base_y + 49, fill=self.palette["ink"], outline=self.palette["ink"])
-        self.canvas.create_rectangle(base_x + 42, base_y + 44, base_x + 47, base_y + 49, fill=self.palette["ink"], outline=self.palette["ink"])
-        self.canvas.create_rectangle(base_x + 31, base_y + 58, base_x + 41, base_y + 61, fill=self.palette["accent"], outline=self.palette["accent"])
+        self.canvas.create_rectangle(base_x + 25, base_y + 44, base_x + 30, base_y + 49, fill="#4c45aa", outline="#4c45aa")
+        self.canvas.create_rectangle(base_x + 42, base_y + 44, base_x + 47, base_y + 49, fill="#4c45aa", outline="#4c45aa")
+        self.canvas.create_rectangle(base_x + 31, base_y + 58, base_x + 41, base_y + 61, fill="#ff89d8", outline="#ff89d8")
 
         # Bunny charm string
         self.canvas.create_line(base_x + 30, base_y - 28, base_x + 88, base_y - 50, fill=self.palette["ink_soft"], width=2)
@@ -310,7 +322,7 @@ class NewJeansInspiredPlayer(tk.Tk):
             self.deck_x + 300,
             self.deck_y + 130,
             fill=self.palette["panel"],
-            outline=self.palette["ink_soft"],
+            outline=self.palette["accent2"],
             width=3,
         )
         self.canvas.create_rectangle(
@@ -318,8 +330,8 @@ class NewJeansInspiredPlayer(tk.Tk):
             self.deck_y + 20,
             self.deck_x + 280,
             self.deck_y + 85,
-            fill=self.palette["highlight"],
-            outline=self.palette["ink_soft"],
+            fill="#697eff",
+            outline="#9db0ff",
             width=2,
         )
 
@@ -328,8 +340,8 @@ class NewJeansInspiredPlayer(tk.Tk):
             self.deck_y + 30,
             self.deck_x + 105,
             self.deck_y + 80,
-            fill="#9ab0ff",
-            outline=self.palette["ink_soft"],
+            fill="#ff7cd3",
+            outline="#ffd5f3",
             width=2,
         )
         self.right_reel = self.canvas.create_oval(
@@ -337,8 +349,8 @@ class NewJeansInspiredPlayer(tk.Tk):
             self.deck_y + 30,
             self.deck_x + 245,
             self.deck_y + 80,
-            fill="#9ab0ff",
-            outline=self.palette["ink_soft"],
+            fill="#ff7cd3",
+            outline="#ffd5f3",
             width=2,
         )
 
@@ -346,7 +358,7 @@ class NewJeansInspiredPlayer(tk.Tk):
         for center_x in (self.deck_x + 80, self.deck_x + 220):
             spokes = []
             for _ in range(4):
-                spoke = self.canvas.create_line(center_x, self.deck_y + 55, center_x, self.deck_y + 35, fill=self.palette["ink"], width=2)
+                spoke = self.canvas.create_line(center_x, self.deck_y + 55, center_x, self.deck_y + 35, fill="#fff4fd", width=2)
                 spokes.append(spoke)
             self.reel_spokes.append((center_x, self.deck_y + 55, spokes))
 
@@ -354,7 +366,7 @@ class NewJeansInspiredPlayer(tk.Tk):
         eq_start_x = self.deck_x + 22
         for i in range(20):
             x0 = eq_start_x + i * 13
-            rect = self.canvas.create_rectangle(x0, self.deck_y + 112, x0 + 8, self.deck_y + 112, fill=self.palette["accent"], outline="")
+            rect = self.canvas.create_rectangle(x0, self.deck_y + 112, x0 + 8, self.deck_y + 112, fill="#ffe27a", outline="")
             self.eq_rects.append(rect)
 
         # Irregular frame tabs / ornaments to make the player shell less boxy
