@@ -142,7 +142,6 @@ class NewJeansInspiredPlayer(tk.Tk):
     def _build_ui(self):
         root = ttk.Frame(self, style="Pixel.TFrame", padding=10)
         root.pack(fill="both", expand=True, padx=14, pady=14)
-        self._draw_window_decor(root)
 
         header = ttk.Frame(root, style="Pixel.TFrame", padding=8)
         header.pack(fill="x", pady=(0, 10))
@@ -169,6 +168,7 @@ class NewJeansInspiredPlayer(tk.Tk):
             highlightbackground=self.palette["ink_soft"],
         )
         self.canvas.pack(fill="both", expand=True)
+        self.canvas.bind("<Configure>", self._on_canvas_resize)
 
         controls = ttk.Frame(left, style="Pixel.TFrame", padding=8)
         controls.pack(fill="x", pady=(8, 0))
@@ -234,12 +234,15 @@ class NewJeansInspiredPlayer(tk.Tk):
         self.time_label = ttk.Label(right, text="00:00 / 00:00", style="Pixel.TLabel")
         self.time_label.pack(anchor="e", pady=(4, 0))
 
-        self._draw_static_scene()
+        self.after_idle(self._draw_static_scene)
+
+    def _on_canvas_resize(self, _event=None):
+        self.after_idle(self._draw_static_scene)
 
     def _draw_static_scene(self):
         self.canvas.delete("all")
-        w = int(self.canvas.winfo_width() or 560)
-        h = int(self.canvas.winfo_height() or 360)
+        w = max(560, int(self.canvas.winfo_width()))
+        h = max(360, int(self.canvas.winfo_height()))
 
         # Pixel checker backdrop
         px = 8
@@ -373,30 +376,6 @@ class NewJeansInspiredPlayer(tk.Tk):
             x0 = x + hx * px
             y0 = y + hy * px
             self.canvas.create_rectangle(x0, y0, x0 + px, y0 + px, fill=color, outline=color)
-
-    def _draw_window_decor(self, root):
-        # Decorative pieces that stick out from the main panel edges for an irregular silhouette.
-        decor = (
-            ("♡ NJ", -10, 20, self.palette["pink"]),
-            ("🐰", 18, -12, self.palette["mint"]),
-            ("✦✦", 760, -12, self.palette["gold"]),
-            ("BUNNIES", 860, 22, self.palette["panel_deep"]),
-            ("NJ", -16, 500, self.palette["panel_deep"]),
-            ("💿", 930, 520, self.palette["mint"]),
-        )
-        for txt, x, y, bg in decor:
-            lbl = tk.Label(
-                root,
-                text=txt,
-                font=("Courier New", 10, "bold"),
-                fg=self.palette["ink"],
-                bg=bg,
-                bd=2,
-                relief="solid",
-                padx=7,
-                pady=3,
-            )
-            lbl.place(x=x, y=y)
 
     def _start_animators(self):
         self._update_visuals()
