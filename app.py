@@ -77,6 +77,9 @@ class NewJeansInspiredPlayer(tk.Tk):
         self.visual_phase = 0.0
         self.eq_values = [0.2] * 20
         self.sparkles = []
+        # Initialized before first animation tick; populated by _draw_static_scene.
+        self.reel_spokes = []
+        self.eq_rects = []
 
         self.queue = [
             {
